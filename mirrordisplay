@@ -1,8 +1,7 @@
 #!/bin/env sh
 
-# Open a menu in wofi asking which of the connected displays you want to mirror, later opens the selected display in wdomirror
 id="$(wdomirror | awk '/Mirrorable output:/')"
-option="$(printf "$id" | wofi --show dmenu)"
+option="$(printf "$id" | wofi --show dmenu -p "Pick a display to mirror")"
 
 mirror="$(printf "$option" | rev | cut -d" " -f1 | rev)"
 
