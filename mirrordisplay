@@ -2,7 +2,5 @@
 
 id="$(wdomirror | awk '/Mirrorable output:/')"
 option="$(printf "$id" | wofi --show dmenu -p "Pick a display to mirror")"
-
 mirror="$(printf "$option" | rev | cut -d" " -f1 | rev)"
-
 wdomirror $mirror
