@@ -85,5 +85,5 @@ if [ $REC ]; then
 else
     notify "Screenshot" "File saved as $FILENAME\nand copied to clipboard" -t 6000 -i $FILENAME
     wl-copy < $FILENAME
-    imv $FILENAME
+    #imv $FILENAME
 fi
