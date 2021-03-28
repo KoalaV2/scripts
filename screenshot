@@ -5,7 +5,7 @@ set -e
 # made by https://github.com/yschaeff/sway_screenshots
 #MENU="dmenu"
 MENU="wofi --show dmenu"
-RECORDER=wf-recorder
+RECORDER="wf-recorder -a"
 TARGET=$(xdg-user-dir PICTURES)/screenshots
 TARGET_VIDEOS=$(xdg-user-dir VIDEOS)/recordings
 
@@ -13,7 +13,7 @@ NOTIFY=$(pidof mako || pidof dunst) || true
 FOCUSED=$(swaymsg -t get_tree | jq '.. | ((.nodes? + .floating_nodes?) // empty) | .[] | select(.focused and .pid) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')
 OUTPUTS=$(swaymsg -t get_outputs | jq -r '.[] | select(.active) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')
 WINDOWS=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')
-REC_PID=$(pidof $RECORDER) || true
+REC_PID=$(pidof wf-recorder) || true
 
 notify() {
     ## if the daemon is not running notify-send will hang indefinitely
