@@ -2,7 +2,10 @@
 output=$(bluetoothctl show | sed -n -e 's/^.*Powered: //p')
 if [[ $output = no ]]; then
     echo "power on" | bluetoothctl
-    notify-send -h int:transient:1 "Bluetooth" "Powered On"
+    device="$(bluetoothctl paired-devices | wofi --show dmenu | cut -d' ' -f2)"
+    notify-send -h int:transient:1 "Bluetooth" "Connecting to $device..." 
+    bluetoothctl connect $device 
+    notify-send -h int:transient:1 "Bluetooth" "Powered On and connected to $device"
 else
     echo "power off" | bluetoothctl
     notify-send -h int:transient:1 "Bluetooth" "Powered Off"
