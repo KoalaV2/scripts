@@ -1,12 +1,27 @@
 #!/bin/bash
+
 output=$(bluetoothctl show | sed -n -e 's/^.*Powered: //p')
+
 if [[ $output = no ]]; then
     echo "power on" | bluetoothctl
-    device="$(bluetoothctl paired-devices | wofi --show dmenu | cut -d' ' -f2)"
-    notify-send -h int:transient:1 "Bluetooth" "Connecting to $device..." 
-    bluetoothctl connect $device 
-    notify-send -h int:transient:1 "Bluetooth" "Powered On and connected to $device"
+    notify-send -h int:transient:1 "Bluetooth" "Powered On"
+
 else
-    echo "power off" | bluetoothctl
-    notify-send -h int:transient:1 "Bluetooth" "Powered Off"
+    choice="$(printf "Connect\nPowerOff" | wofi --show dmenu)"
+
+    if [ $choice == "Connect" ]; then
+        device="$(bluetoothctl paired-devices | wofi --show dmenu | cut -d' ' -f2)"
+        notify-send -h int:transient:1 "Bluetooth" "Connecting to $device..." 
+        if bluetoothctl connect $device; then
+            notify-send -h int:transient:1 "Bluetooth" "Connected to $device"
+        else
+            notify-send -h int:transient:1 "Bluetooth" "Something went wrong connecting to $device"
+        fi
+
+    elif [ $choice == "PowerOff" ]; then
+        echo "power off" | bluetoothctl
+        notify-send -h int:transient:1 "Bluetooth" "Powered Off"
+    else
+        notify-send -h int:transient:1 "Bluetooth" "Something went wrong..."
+    fi
 fi
