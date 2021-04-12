@@ -1,10 +1,8 @@
-#!/bin/bash 
+#!/bin/bash
 
 currenttime=`date +%H`
-#echo $currenttime
 
 if [ $currenttime -gt 15 ] || [  $currenttime -lt 7 ]
 then
-#	echo "Time is over 16 or before 7, turning on keyboard"
 	brightnessctl --device="tpacpi::kbd_backlight" set 1 & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume 'brightnessctl --device="tpacpi::kbd_backlight" set 1'
 fi
