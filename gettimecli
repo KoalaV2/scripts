@@ -78,12 +78,12 @@ def main():
     responsethird = getData(currentweekday())
     result = json.loads(responsethird.text)
     a = []
-    
-    try: 
+
+    try:
         for x in result['data']['lessonInfo']:
             temp = f"{x['timeStart']} -- {x['texts'][0]}, börjar kl {x['timeStart']} och slutar kl {x['timeEnd']}"
             try:
-                temp += f" i sal {x['texts'][2]}"
+                temp += f" i sal {x['texts'][3]}"
             except:
                 pass
             a.append(temp)
