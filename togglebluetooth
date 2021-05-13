@@ -24,5 +24,3 @@ else
         notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Something went wrong..."
     fi
 fi
-
-#testing
