@@ -1,6 +1,12 @@
 #!/bin/env sh
 
-id="$(wdomirror | awk '/Mirrorable output:/')"
-option="$(printf "$id" | wofi --show dmenu -p "Pick a display to mirror")"
-mirror="$(printf "$option" | rev | cut -d" " -f1 | rev)"
-wdomirror $mirror
+
+choice="$(printf "Clone\nExtend" | wofi --show dmenu)"
+if [ $choice == "Clone" ]; then
+    id="$(wdomirror | awk '/Mirrorable output:/')"
+    option="$(printf "$id" | wofi --show dmenu -p "Pick a display to mirror")"
+    mirror="$(printf "$option" | rev | cut -d" " -f1 | rev)"
+    wdomirror $mirror
+elif [ $choice == "Extend" ]; then
+    extend="$(printf "Right\nLeft\nTop\nBottom" | wofi --show dmenu)"
+fi
