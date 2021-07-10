@@ -6,4 +6,3 @@ if [ $currenttime -gt 20 ] || [  $currenttime -lt 7 ]
 then
 	brightnessctl --device="tpacpi::kbd_backlight" set 1 & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume 'brightnessctl --device="tpacpi::kbd_backlight" set 1'
 fi
-#testing
