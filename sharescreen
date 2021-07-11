@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# CREATED NOT BY ME BUT BY https://shibumi.dev/posts/wayland-in-2021/
-
-input=$(slurp -o -f "%o")
-/usr/lib/xdg-desktop-portal -r & /usr/lib/xdg-desktop-portal-wlr -r -o "$input" &
