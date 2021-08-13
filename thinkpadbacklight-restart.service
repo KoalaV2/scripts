@@ -1,0 +1,7 @@
+[Unit]
+Description= Restart Thinkpad keyboard backlight
+
+[Service]
+ExecStart=systemctl --user restart thinkpadbacklight
+[Install]
+WantedBy=default.target

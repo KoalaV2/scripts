@@ -1,0 +1,7 @@
+[Unit]
+Description=Thinkpad keyboard backlight
+
+[Service]
+ExecStart=/bin/bash /home/theo/.scripts/tpbacklight
+[Install]
+WantedBy=default.target
