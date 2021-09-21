@@ -3,8 +3,8 @@ set -e
 
 ## USER PREFERENCES ##
 # made by https://github.com/yschaeff/sway_screenshots
-#MENU="dmenu"
-MENU="wofi --show dmenu"
+
+MENU="rofi -i -dmenu"
 RECORDER="wf-recorder -a"
 TARGET=$(xdg-user-dir PICTURES)/screenshots
 TARGET_VIDEOS=$(xdg-user-dir VIDEOS)/recordings
