@@ -1,7 +1,7 @@
 #!/bin/env sh
 
 
-menu="rofi -dmenu -i"
+menu="wofi -d"
 
 choice="$(printf "Clone\nExtend" | $menu -p "Select a action" )"
 if [ $choice == "Clone" ]; then
