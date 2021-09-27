@@ -4,7 +4,7 @@ set -e
 ## USER PREFERENCES ##
 # made by https://github.com/yschaeff/sway_screenshots
 
-MENU="rofi -i -dmenu"
+MENU="wofi -d"
 RECORDER="wf-recorder -a"
 TARGET=$(xdg-user-dir PICTURES)/screenshots
 TARGET_VIDEOS=$(xdg-user-dir VIDEOS)/recordings
