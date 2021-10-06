@@ -3,7 +3,7 @@
 
 menu="wofi -d"
 
-choice="$(printf "Clone\nExtend" | $menu -p "Select a action" )"
+choice="$(printf "Clone\nExtend\nRotate" | $menu -p "Select a action" )"
 if [ $choice == "Clone" ]; then
     id="$(wdomirror | awk '/Mirrorable output:/')"
     option="$(printf "$id" | $menu -p "Pick a display to mirror")"
@@ -24,4 +24,7 @@ if [ $choice == "Clone" ]; then
 
 elif [ $choice == "Extend" ]; then
     extend="$(printf "Right\nLeft\nTop\nBottom" | $menu )"
+elif [ $choice == "Rotate" ]; then
+    extend="$(printf "0\n90\n180\n270\n" | $menu )"
+    swaymsg output eDP-1 transform $extend
 fi
