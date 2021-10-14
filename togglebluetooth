@@ -5,7 +5,6 @@ output=$(bluetoothctl show | sed -n -e 's/^.*Powered: //p')
 if [[ $output = no ]]; then
     echo "power on" | bluetoothctl
     notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Powered On"
-
 else
     choice="$(printf "Connect\nPowerOff" | wofi -d)"
     if [ $choice == "Connect" ]; then
