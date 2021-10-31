@@ -5,7 +5,7 @@ currenttime=`date +%H`
 if [ $currenttime -gt 18 ] || [  $currenttime -lt 7 ]; then
 	brightnessctl --device="tpacpi::kbd_backlight" set 1 & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume 'brightnessctl --device="tpacpi::kbd_backlight" set 1'
 elif [ $1 == "on" ]; then
-	brightnessctl --device="tpacpi::kbd_backlight" set 1 & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume 'brightnessctl --device="tpacpi::kbd_backlight" set 1'
+	brightnessctl --device="tpacpi::kbd_backlight" set 2 & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume 'brightnessctl --device="tpacpi::kbd_backlight" set 2'
 else
     brightnessctl --device="tpacpi::kbd_backlight" set 0
 fi

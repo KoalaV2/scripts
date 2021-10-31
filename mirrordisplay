@@ -11,6 +11,7 @@ if [ $choice == "Clone" ]; then
     monitor_model="$(swaymsg -t get_outputs --raw | grep "model")"
     workspace_id="$(swaymsg -t get_outputs | grep "current_workspace" | sed -n 2p | grep -o -E '[0-9]+')"
     if [ "$workspace_id" != "" ]; then
+        echo "workspace_id: $workspace_id"
         wdomirror $mirror &
         pid=$!
         notify-send "MirrorDisplay" "Waiting 1 second.."
