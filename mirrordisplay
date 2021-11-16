@@ -1,5 +1,4 @@
-#!/bin/env sh
-
+#!/usr/bin/env bash
 
 menu="wofi -d"
 
