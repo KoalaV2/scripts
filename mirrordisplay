@@ -3,7 +3,7 @@
 menu="wofi -d"
 
 choice="$(printf "Clone\nExtend\nRotate" | $menu -p "Select a action" )"
-if [ $choice == "Clone" ]; then
+if [ "$choice" == "Clone" ]; then
     id="$(wdomirror | awk '/Mirrorable output:/')"
     option="$(printf "$id" | $menu -p "Pick a display to mirror")"
     mirror="$(printf "$option" | rev | cut -d" " -f1 | rev)"
@@ -11,20 +11,20 @@ if [ $choice == "Clone" ]; then
     workspace_id="$(swaymsg -t get_outputs | grep "current_workspace" | sed -n 2p | grep -o -E '[0-9]+')"
     if [ "$workspace_id" != "" ]; then
         echo "workspace_id: $workspace_id"
-        wdomirror $mirror &
+        wdomirror "$mirror" &
         pid=$!
         notify-send "MirrorDisplay" "Waiting 1 second.."
         sleep 1.2
-        swaymsg "[pid=$pid]" move window to workspace $workspace_id
+        swaymsg "[pid=$pid]" move window to workspace "$workspace_id"
         swaymsg "[pid=$pid]" fullscreen
         notify-send "MirrorDisplay" "Window moved to workspace $workspace_id"
     else
         notify-send "MirrorDisplay secondary workspace not found."
     fi
 
-elif [ $choice == "Extend" ]; then
+elif [ "$choice" == "Extend" ]; then
     extend="$(printf "Right\nLeft\nTop\nBottom" | $menu )"
-elif [ $choice == "Rotate" ]; then
+elif [ "$choice" == "Rotate" ]; then
     extend="$(printf "0\n90\n180\n270\n" | $menu )"
-    swaymsg output eDP-1 transform $extend
+    swaymsg output eDP-1 transform "$extend"
 fi

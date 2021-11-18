@@ -7,11 +7,11 @@ if [[ $output = no ]]; then
     notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Powered On"
 else
     choice="$(printf "Connect\nPowerOff" | wofi -d)"
-    if [ $choice == "Connect" ]; then
+    if [ "$choice" == "Connect" ]; then
         device="$(bluetoothctl paired-devices | wofi -d | cut -d' ' -f2)"
         if [ "$device" != "" ]; then
             notify-send -h int:transient:1 "Bluetooth" "Connecting to $device..."
-            if bluetoothctl connect $device; then
+            if bluetoothctl connect "$device"; then
                 notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Connected to $device"
             else
                 notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Something went wrong connecting to $device"
@@ -20,10 +20,11 @@ else
             notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "No device selected, exiting script."
             exit
         fi
-    elif [ $choice == "PowerOff" ]; then
+    elif [ "$choice" == "PowerOff" ]; then
         echo "power off" | bluetoothctl
         notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Powered Off"
     else
         notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Something went wrong..."
     fi
 fi
+
