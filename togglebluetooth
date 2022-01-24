@@ -11,9 +11,7 @@ else
         device="$(bluetoothctl paired-devices | wofi -d | cut -d' ' -f2)"
         if [ "$device" != "" ]; then
             notify-send -h int:transient:1 "Bluetooth" "Connecting to $device..."
-            if bluetoothctl connect "$device"; then
-                notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Connected to $device"
-            else
+            if ! bluetoothctl connect "$device"; then
                 notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Something went wrong connecting to $device"
             fi
         else
