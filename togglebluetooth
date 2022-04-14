@@ -15,7 +15,7 @@ else
                 notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "Something went wrong connecting to $device"
             fi
         else
-            notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "No device selected, exiting script."
+            notify-send -h int:transient:1 -i /home/theo/Pictures/bluetooth_icon.png "Bluetooth" "No device selected."
             exit
         fi
     elif [ "$choice" == "PowerOff" ]; then
