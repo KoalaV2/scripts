@@ -8,7 +8,7 @@ if [[ $output = no ]]; then
 else
     choice="$(printf "Connect\nPowerOff" | wofi -d)"
     if [ "$choice" == "Connect" ]; then
-        device="$(bluetoothctl paired-devices | wofi -d | cut -d' ' -f2)"
+        device="$(bluetoothctl devices Paired | wofi -d | cut -d' ' -f2)"
         if [ "$device" != "" ]; then
             notify-send -h int:transient:1 "Bluetooth" "Connecting to $device..."
             if ! bluetoothctl connect "$device"; then
