@@ -1,21 +1,20 @@
 #!/bin/bash
 
-# First obtain a location code from: https://weather.codes/search/
-# Insert your location. For example this is for Stockholm sweden.
-location="SWXX0031"
-tmpfile=/tmp/$location.out
+url="http://www.datameteo.com/meteo/weather_Stockholm"
 
-creationdate=$(date '+%d' -d "@$( stat -c '%Y' "$tmpfile";)")
-currentdate=$(date '+%d')
+# we get all the web page
+allfile=$( wget -qO-  $url | sed 's/<br/\n/g' | sed 's/<\/span>/\n/g' | grep -i ">Sunrise");
 
-if [ "$creationdate" != "$currentdate" ]; then
-    curl -s "http://weather.yahooapis.com/forecastrss?w=$location&u=c" > $tmpfile
-fi
+# we get the original sunrise/sunset time values
+sunrise_str=$(echo $allfile | cut -d ":" -f 2,3 | sed 's|[^0-9]*\([0-9\:]*\)|\1 |g')
+sunset_str=$(echo $allfile | cut -d ":" -f 4,5 | sed 's|[^0-9]*\([0-9\:]*\)|\1 |g')
 
-SUNR=$(grep SunriseSunset "$tmpfile" | grep -oE '((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))' | head -1)
-SUNS=$(grep SunriseSunset "$tmpfile" | grep -oE '((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))' | tail -1)
-sunrise=$(date --date="$SUNR" +%H)
-sunset=$(date --date="$SUNS" +%H)
+# we convert time values to Time in 24-hour format
+sunset=$(/bin/date --date="$sunset_str" +%R)
+sunrise=$(/bin/date --date="$sunrise_str" +%R)
+
+sunset=$(echo $sunset | cut -d ":" -f 1)
+sunrise=$(echo $sunrise | cut -d ":" -f 1)
 
 currenttime=$(date +%H)
 
