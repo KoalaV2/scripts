@@ -18,7 +18,7 @@ sunrise=$(echo $sunrise | cut -d ":" -f 1)
 
 currenttime=$(date +%H)
 
-if [ "$currenttime" -gt $sunset ] || [  "$currenttime" -lt $sunrise ]; then
+if [ "$currenttime" -ge $sunset ] || [  "$currenttime" -le $sunrise ]; then
 	brightnessctl --device="tpacpi::kbd_backlight" set 1 & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume 'brightnessctl --device="tpacpi::kbd_backlight" set 1'
 elif [ "$1" ]; then
 	brightnessctl --device="tpacpi::kbd_backlight" set "$1" & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume "brightnessctl --device='tpacpi::kbd_backlight' set $1"
