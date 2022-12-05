@@ -1,8 +1,25 @@
 #!/bin/bash
 
+# First obtain a location code from: https://weather.codes/search/
+# Insert your location. For example this is for Stockholm sweden.
+location="SWXX0031"
+tmpfile=/tmp/$location.out
+
+creationdate=$(date '+%d' -d "@$( stat -c '%Y' "$tmpfile";)")
+currentdate=$(date '+%d')
+
+if [ "$creationdate" != "$currentdate" ]; then
+    curl -s "http://weather.yahooapis.com/forecastrss?w=$location&u=c" > $tmpfile
+fi
+
+SUNR=$(grep SunriseSunset "$tmpfile" | grep -oE '((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))' | head -1)
+SUNS=$(grep SunriseSunset "$tmpfile" | grep -oE '((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))' | tail -1)
+sunrise=$(date --date="$SUNR" +%H)
+sunset=$(date --date="$SUNS" +%H)
+
 currenttime=$(date +%H)
 
-if [ "$currenttime" -gt 19 ] || [  "$currenttime" -lt 7 ]; then
+if [ "$currenttime" -gt $sunset ] || [  "$currenttime" -lt $sunrise ]; then
 	brightnessctl --device="tpacpi::kbd_backlight" set 1 & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume 'brightnessctl --device="tpacpi::kbd_backlight" set 1'
 elif [ "$1" ]; then
 	brightnessctl --device="tpacpi::kbd_backlight" set "$1" & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume "brightnessctl --device='tpacpi::kbd_backlight' set $1"
