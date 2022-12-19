@@ -16,7 +16,8 @@ sunrise=$(/bin/date --date="$sunrise_str" +%R)
 sunset=$(echo $sunset | cut -d ":" -f 1)
 sunrise=$(echo $sunrise | cut -d ":" -f 1)
 
-currenttime=$(date +%H)
+# Subtract one hor as it usually takes around 70-100 minutes for it to get dark after sunset.
+currenttime=$(date -d "-1 hour" +%H)
 
 if [ "$currenttime" -ge $sunset ] || [  "$currenttime" -le $sunrise ]; then
 	brightnessctl --device="tpacpi::kbd_backlight" set 1 & swayidle timeout 15 'brightnessctl --device="tpacpi::kbd_backlight" set 0' resume 'brightnessctl --device="tpacpi::kbd_backlight" set 1'
