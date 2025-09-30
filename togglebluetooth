@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 output=$(bluetoothctl show | sed -n -e 's/^.*Powered: //p')
 
