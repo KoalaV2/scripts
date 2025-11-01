@@ -1,27 +1,54 @@
 #!/usr/bin/env bash
-# Usage: hyprmovews left|right|up|down
+# Usage: hypr_move_ws.sh left|right|up|down
 
 cmd="$1"
 if [[ "$cmd" != "left" && "$cmd" != "right" && "$cmd" != "up" && "$cmd" != "down" ]]; then
-  echo "Usage: $0 left|right|up|down"
-  exit 1
+    echo "Usage: $0 left|right|up|down"
+    exit 1
 fi
 
-# get JSON of monitors
+# get monitors JSON
 monitors_json=$(hyprctl monitors -j)
 
-# find current monitor name & id
-current_name=$(echo "$monitors_json" | jq -r '.[] | select(.focused==true) | .name')
-current_id=$(echo "$monitors_json" | jq -r '.[] | select(.focused==true) | .id')
+# find current monitor
+current_info=$(echo "$monitors_json" | jq '.[] | select(.focused==true)')
+current=$(echo "$current_info" | jq -r '.name')
+current_x=$(echo "$current_info" | jq '.x')
+current_y=$(echo "$current_info" | jq '.y')
 
-if [[ -z "$current_name" ]]; then
-  echo "Error: current monitor not found."
-  exit 1
+if [[ -z "$current" ]]; then
+    echo "Error: could not detect current monitor"
+    exit 1
 fi
 
-# move the active workspace to a monitor in the given direction
-# Hyprland dispatcher allows specifying monitor by direction: e.g. "left", "right", "up", "down" :contentReference[oaicite:2]{index=2}
-ws=$(echo "$monitors_json" | jq -r ".[] | select(.name==\"$current_name\") | .activeWorkspace.id")
+# determine target monitor based on direction
+case "$cmd" in
+    left)
+        target=$(echo "$monitors_json" | jq -r --argjson cx "$current_x" \
+            '.[] | select(.x < $cx) | .name' | sort -nr | head -n1)
+        ;;
+    right)
+        target=$(echo "$monitors_json" | jq -r --argjson cx "$current_x" \
+            '.[] | select(.x > $cx) | .name' | sort -n | head -n1)
+        ;;
+    up)
+        target=$(echo "$monitors_json" | jq -r --argjson cy "$current_y" \
+            '.[] | select(.y < $cy) | .name' | sort -nr | head -n1)
+        ;;
+    down)
+        target=$(echo "$monitors_json" | jq -r --argjson cy "$current_y" \
+            '.[] | select(.y > $cy) | .name' | sort -n | head -n1)
+        ;;
+esac
 
-hyprctl dispatch moveworkspacetomonitor "$ws" "${cmd}"
+# exit if no monitor in that direction
+if [[ -z "$target" ]]; then
+    exit 0
+fi
+
+# find active workspace on current monitor
+ws=$(echo "$monitors_json" | jq -r ".[] | select(.name==\"$current\") | .activeWorkspace.id")
+
+# dispatch the move and then switch to it
+hyprctl dispatch moveworkspacetomonitor "$ws" "$target"
 hyprctl dispatch workspace "$ws"
