@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Usage: hyprmovews left|right|up|down
+
+cmd="$1"
+if [[ "$cmd" != "left" && "$cmd" != "right" && "$cmd" != "up" && "$cmd" != "down" ]]; then
+  echo "Usage: $0 left|right|up|down"
+  exit 1
+fi
+
+# get JSON of monitors
+monitors_json=$(hyprctl monitors -j)
+
+# find current monitor name & id
+current_name=$(echo "$monitors_json" | jq -r '.[] | select(.focused==true) | .name')
+current_id=$(echo "$monitors_json" | jq -r '.[] | select(.focused==true) | .id')
+
+if [[ -z "$current_name" ]]; then
+  echo "Error: current monitor not found."
+  exit 1
+fi
+
+# move the active workspace to a monitor in the given direction
+# Hyprland dispatcher allows specifying monitor by direction: e.g. "left", "right", "up", "down" :contentReference[oaicite:2]{index=2}
+ws=$(echo "$monitors_json" | jq -r ".[] | select(.name==\"$current_name\") | .activeWorkspace.id")
+
+hyprctl dispatch moveworkspacetomonitor "$ws" "${cmd}"
+hyprctl dispatch workspace "$ws"
